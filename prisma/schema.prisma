@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  platform    String   @default("bilibili") // bilibili | douyin | wechat
+  status      String   @default("planning") // planning | scripting | producing | published | archived
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workflowSteps WorkflowStep[]
+  analyses      Analysis[]
+  videoData     VideoData?
+  improvements  ImprovementLog[]
+}
+
+model WorkflowStep {
+  id          String   @id @default(uuid())
+  projectId   String
+  stepNumber  Int
+  stepName    String
+  status      String   @default("pending") // pending | in_progress | passed | failed
+  inputData   String?  // JSON string
+  aiFeedback  String?  // JSON string
+  userNotes   String?
+  passedAt    DateTime?
+  createdAt   DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Analysis {
+  id          String   @id @default(uuid())
+  projectId   String
+  type        String   // script | video | performance
+  content     String
+  score       Float?
+  suggestions String?  // JSON string
+  createdAt   DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model VideoData {
+  id              String   @id @default(uuid())
+  projectId       String   @unique
+  platformVideoId String?  // BV号 or video URL
+
+  views      Int @default(0)
+  likes      Int @default(0)
+  comments   Int @default(0)
+  shares     Int @default(0)
+  favorites  Int @default(0)
+  coins      Int @default(0) // B站
+
+  retentionData String? // JSON: [{timePoint, retention}, ...]
+  audienceData  String? // JSON: {age, gender, region}
+  sourceData    String? // JSON: {search, recommend, social, ...}
+
+  syncedAt  DateTime?
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model ImprovementLog {
+  id         String   @id @default(uuid())
+  projectId  String
+  category   String   // script | hook | rhythm | visual | pacing | other
+  suggestion String
+  wasHelpful Boolean?
+  appliedAt  DateTime?
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
