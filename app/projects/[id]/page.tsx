@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, ArrowRight, Eye, Heart, MessageCircle, Share2, Star } from "lucide-react";
+import { DeleteProjectButton } from "@/components/project/delete-button";
 
 export const dynamic = "force-dynamic";
 
@@ -54,6 +55,7 @@ export default async function ProjectDetailPage({
           </div>
           <h1 className="text-2xl font-bold">{project.title || "未命名项目"}</h1>
         </div>
+        <DeleteProjectButton projectId={project.id} projectTitle={project.title || ""} />
       </div>
 
       <Tabs defaultValue="steps">

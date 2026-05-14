@@ -1,16 +1,17 @@
 import Anthropic from "@anthropic-ai/sdk";
 
-let client: Anthropic | null = null;
+export interface AnalysisResult {
+  score: number;
+  content: string;
+  suggestions: { priority: number; category: string; suggestion: string }[];
+}
 
-function getClient(): Anthropic {
-  if (!client) {
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey || apiKey === "your-api-key-here") {
-      throw new Error("ANTHROPIC_API_KEY is not configured. Please set it in .env or in Settings.");
-    }
-    client = new Anthropic({ apiKey });
+function getApiKey(override?: string): string {
+  const apiKey = override || process.env.ANTHROPIC_API_KEY;
+  if (!apiKey || apiKey === "your-api-key-here") {
+    throw new Error("ANTHROPIC_API_KEY is not configured. Please set it in .env or in Settings.");
   }
-  return client;
+  return apiKey;
 }
 
 export function isApiKeyConfigured(): boolean {
@@ -18,18 +19,14 @@ export function isApiKeyConfigured(): boolean {
   return !!key && key !== "your-api-key-here";
 }
 
-export interface AnalysisResult {
-  score: number;
-  content: string;
-  suggestions: { priority: number; category: string; suggestion: string }[];
-}
-
 export async function analyzeScript(
   scriptContent: string,
   stepName: string,
-  customPrompt: string
+  customPrompt: string,
+  apiKeyOverride?: string
 ): Promise<AnalysisResult> {
-  const anthropic = getClient();
+  const apiKey = getApiKey(apiKeyOverride);
+  const anthropic = new Anthropic({ apiKey });
 
   const systemPrompt = `你是 VideoForge AI，一个专为知识科普视频创作者服务的 AI 评审系统。
 你的风格：直接、具体、有建设性。不给泛泛的"这里可以更好"，而是指出"具体哪一段的什么问题，怎么改"。
@@ -67,29 +64,7 @@ ${scriptContent}
     ],
   });
 
-  const text = msg.content
-    .filter((b) => b.type === "text")
-    .map((b) => b.text)
-    .join("\n");
-
-  // Parse score
-  const scoreMatch = text.match(/【综合评分】\s*(\d+)/);
-  const score = scoreMatch ? parseInt(scoreMatch[1]) : 70;
-
-  // Parse suggestions
-  const suggestions: AnalysisResult["suggestions"] = [];
-  const suggestionRegex = /\d+\.\s*\[([^\]]+)\]\s*(.+)/g;
-  let match;
-  let priority = 1;
-  while ((match = suggestionRegex.exec(text)) !== null) {
-    suggestions.push({
-      priority: priority++,
-      category: match[1].trim(),
-      suggestion: match[2].trim(),
-    });
-  }
-
-  return { score, content: text, suggestions };
+  return parseAiResponse(msg.content);
 }
 
 export async function analyzeData(
@@ -103,9 +78,11 @@ export async function analyzeData(
     audienceData?: string;
     sourceData?: string;
     platform: string;
-  }
+  },
+  apiKeyOverride?: string
 ): Promise<AnalysisResult> {
-  const anthropic = getClient();
+  const apiKey = getApiKey(apiKeyOverride);
+  const anthropic = new Anthropic({ apiKey });
 
   const systemPrompt = `你是 VideoForge AI 的数据复盘分析师。你的任务是分析视频数据，找出问题，给出具体改进建议。用中文回复。`;
 
@@ -149,7 +126,11 @@ export async function analyzeData(
     ],
   });
 
-  const text = msg.content
+  return parseAiResponse(msg.content);
+}
+
+function parseAiResponse(content: Anthropic.Messages.ContentBlock[]): AnalysisResult {
+  const text = content
     .filter((b) => b.type === "text")
     .map((b) => b.text)
     .join("\n");

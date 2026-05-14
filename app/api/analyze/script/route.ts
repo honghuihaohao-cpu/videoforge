@@ -1,21 +1,24 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { analyzeScript } from "@/lib/ai-analyzer";
+
+const bodySchema = z.object({
+  content: z.string().min(1, "content 不能为空"),
+  stepName: z.string().optional(),
+  prompt: z.string().min(1, "prompt 不能为空"),
+  apiKey: z.string().optional(),
+});
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { content, stepName, prompt, apiKey } = body;
-
-    if (!content || !prompt) {
-      return NextResponse.json({ error: "缺少 content 或 prompt 参数" }, { status: 400 });
+    const raw = await req.json();
+    const parsed = bodySchema.safeParse(raw);
+    if (!parsed.success) {
+      return NextResponse.json({ error: "参数校验失败", details: parsed.error.flatten() }, { status: 400 });
     }
 
-    // Allow key override for testing
-    if (apiKey) {
-      process.env.ANTHROPIC_API_KEY = apiKey;
-    }
-
-    const result = await analyzeScript(content, stepName || "未知", prompt);
+    const { content, stepName, prompt, apiKey } = parsed.data;
+    const result = await analyzeScript(content, stepName || "未知", prompt, apiKey);
     return NextResponse.json(result);
   } catch (error: any) {
     console.error("API analyze error:", error);
