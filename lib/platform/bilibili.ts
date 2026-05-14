@@ -72,7 +72,7 @@ export async function fetchVideoStat(videoId: string): Promise<BilibiliStatRespo
   try {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "VideoForge/1.0 (https://github.com/your-username/videoforge)",
+        "User-Agent": "VideoForge/1.0 (https://github.com/honghuihaohao-cpu/videoforge)",
         Referer: "https://www.bilibili.com/",
       },
     });

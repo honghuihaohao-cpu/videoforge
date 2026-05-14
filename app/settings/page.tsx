@@ -109,8 +109,8 @@ export default function SettingsPage() {
           <p>技术栈：Next.js + Prisma + SQLite + Claude API + shadcn/ui + Recharts</p>
           <p>
             GitHub：{" "}
-            <a href="https://github.com/your-username/videoforge" className="text-primary hover:underline" target="_blank">
-              github.com/your-username/videoforge
+            <a href="https://github.com/honghuihaohao-cpu/videoforge" className="text-primary hover:underline" target="_blank">
+              github.com/honghuihaohao-cpu/videoforge
             </a>
           </p>
         </CardContent>
