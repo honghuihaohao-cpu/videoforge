@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
 export interface AnalysisResult {
   score: number;
@@ -6,17 +7,73 @@ export interface AnalysisResult {
   suggestions: { priority: number; category: string; suggestion: string }[];
 }
 
-function getApiKey(override?: string): string {
-  const apiKey = override || process.env.ANTHROPIC_API_KEY;
-  if (!apiKey || apiKey === "your-api-key-here") {
-    throw new Error("ANTHROPIC_API_KEY is not configured. Please set it in .env or in Settings.");
+type AIProvider = "claude" | "openai" | "deepseek";
+
+function getProviderConfig(): { provider: AIProvider; apiKey: string; model: string; baseURL?: string } {
+  const provider = (process.env.AI_PROVIDER || "claude") as AIProvider;
+  let apiKey: string;
+  let model: string;
+  let baseURL: string | undefined;
+
+  switch (provider) {
+    case "openai":
+      apiKey = process.env.OPENAI_API_KEY || "";
+      model = process.env.OPENAI_MODEL || "gpt-4o";
+      break;
+    case "deepseek":
+      apiKey = process.env.DEEPSEEK_API_KEY || "";
+      model = process.env.DEEPSEEK_MODEL || "deepseek-chat";
+      baseURL = "https://api.deepseek.com";
+      break;
+    default:
+      apiKey = process.env.ANTHROPIC_API_KEY || "";
+      model = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6";
   }
-  return apiKey;
+
+  if (!apiKey || apiKey === "your-api-key-here") {
+    throw new Error(
+      `AI API Key 未配置。请在 .env 中设置 ${provider === "claude" ? "ANTHROPIC_API_KEY" : provider === "openai" ? "OPENAI_API_KEY" : "DEEPSEEK_API_KEY"}。`
+    );
+  }
+
+  return { provider, apiKey, model, baseURL };
 }
 
 export function isApiKeyConfigured(): boolean {
-  const key = process.env.ANTHROPIC_API_KEY;
-  return !!key && key !== "your-api-key-here";
+  try {
+    getProviderConfig();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function callAI(systemPrompt: string, userPrompt: string, apiKeyOverride?: string): Promise<string> {
+  const config = getProviderConfig();
+  const apiKey = apiKeyOverride || config.apiKey;
+
+  if (config.provider === "claude") {
+    const client = new Anthropic({ apiKey });
+    const msg = await client.messages.create({
+      model: config.model,
+      max_tokens: 2048,
+      system: systemPrompt,
+      messages: [{ role: "user" as const, content: userPrompt }],
+    });
+    return msg.content.filter((b) => b.type === "text").map((b) => b.text).join("\n");
+  }
+
+  // OpenAI-compatible API (works for DeepSeek too)
+  const client = new OpenAI({ apiKey, baseURL: config.baseURL || undefined });
+  const completion = await client.chat.completions.create({
+    model: config.model,
+    max_tokens: 2048,
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt },
+    ],
+  });
+  return completion.choices[0]?.message?.content || "";
 }
 
 export async function analyzeScript(
@@ -25,22 +82,12 @@ export async function analyzeScript(
   customPrompt: string,
   apiKeyOverride?: string
 ): Promise<AnalysisResult> {
-  const apiKey = getApiKey(apiKeyOverride);
-  const anthropic = new Anthropic({ apiKey });
-
   const systemPrompt = `你是 VideoForge AI，一个专为知识科普视频创作者服务的 AI 评审系统。
 你的风格：直接、具体、有建设性。不给泛泛的"这里可以更好"，而是指出"具体哪一段的什么问题，怎么改"。
 你的分析必须包含一个 0-100 的综合评分，以及按优先级排序的改进建议。
 用中文回复。`;
 
-  const msg = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 2048,
-    system: systemPrompt,
-    messages: [
-      {
-        role: "user",
-        content: `${customPrompt}
+  const userPrompt = `${customPrompt}
 
 【用户提交的脚本/内容】
 ---
@@ -59,12 +106,10 @@ ${scriptContent}
 3. [类别] 具体建议
 
 【一句话总结】
-（给创作者的一句鼓励或提醒）`,
-      },
-    ],
-  });
+（给创作者的一句鼓励或提醒）`;
 
-  return parseAiResponse(msg.content);
+  const text = await callAI(systemPrompt, userPrompt, apiKeyOverride);
+  return parseAiResponse(text);
 }
 
 export async function analyzeData(
@@ -81,19 +126,9 @@ export async function analyzeData(
   },
   apiKeyOverride?: string
 ): Promise<AnalysisResult> {
-  const apiKey = getApiKey(apiKeyOverride);
-  const anthropic = new Anthropic({ apiKey });
-
   const systemPrompt = `你是 VideoForge AI 的数据复盘分析师。你的任务是分析视频数据，找出问题，给出具体改进建议。用中文回复。`;
 
-  const msg = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 2048,
-    system: systemPrompt,
-    messages: [
-      {
-        role: "user",
-        content: `分析以下视频的数据表现，平台：${videoData.platform}
+  const userPrompt = `分析以下视频的数据表现，平台：${videoData.platform}
 
 基础数据：
 - 播放量：${videoData.views}
@@ -121,20 +156,13 @@ export async function analyzeData(
 3. [类别] 具体建议
 
 【下期实验建议】
-一个值得在下一期尝试的A/B测试方案`,
-      },
-    ],
-  });
+一个值得在下一期尝试的A/B测试方案`;
 
-  return parseAiResponse(msg.content);
+  const text = await callAI(systemPrompt, userPrompt, apiKeyOverride);
+  return parseAiResponse(text);
 }
 
-function parseAiResponse(content: Anthropic.Messages.ContentBlock[]): AnalysisResult {
-  const text = content
-    .filter((b) => b.type === "text")
-    .map((b) => b.text)
-    .join("\n");
-
+function parseAiResponse(text: string): AnalysisResult {
   const scoreMatch = text.match(/【综合评分】\s*(\d+)/);
   const score = scoreMatch ? parseInt(scoreMatch[1]) : 70;
 

@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  videoforge:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:/app/data/dev.db
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - AUTH_SECRET=${AUTH_SECRET:-change-me-in-production}
+      - AUTH_GITHUB_ID=${AUTH_GITHUB_ID:-}
+      - AUTH_GITHUB_SECRET=${AUTH_GITHUB_SECRET:-}
+    volumes:
+      - videoforge_data:/app/data
+      - videoforge_prisma:/app/prisma
+    restart: unless-stopped
+
+volumes:
+  videoforge_data:
+  videoforge_prisma:
