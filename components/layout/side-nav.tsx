@@ -9,15 +9,18 @@ import {
   FolderOpen,
   BarChart3,
   Settings,
+  GitCompare,
   Zap,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { UserMenu } from "@/components/layout/user-menu";
 
 const navItems = [
   { href: "/", label: "仪表盘", icon: LayoutDashboard },
   { href: "/workflow", label: "工作流", icon: ListTodo },
   { href: "/projects", label: "项目", icon: FolderOpen },
   { href: "/analytics", label: "数据分析", icon: BarChart3 },
+  { href: "/compare", label: "对比", icon: GitCompare },
   { href: "/settings", label: "设置", icon: Settings },
 ];
 
@@ -57,8 +60,9 @@ export function SideNav() {
         })}
       </nav>
 
-      <div className="border-t">
+      <div className="border-t space-y-1 py-1">
         <ThemeToggle />
+        <UserMenu />
         <div className="p-3 hidden lg:block">
           <p className="text-xs text-muted-foreground">VideoForge v0.2.0</p>
         </div>

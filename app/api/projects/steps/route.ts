@@ -63,6 +63,19 @@ export async function POST(req: Request) {
           score: scoreMatch ? parseInt(scoreMatch[1]) : null,
         },
       });
+
+      // Auto-extract improvement suggestions from AI feedback
+      const sugRegex = /\d+\.\s*\[([^\]]+)\]\s*(.+)/g;
+      let sugMatch;
+      while ((sugMatch = sugRegex.exec(aiFeedback)) !== null) {
+        await db.improvementLog.create({
+          data: {
+            projectId,
+            category: sugMatch[1].trim(),
+            suggestion: sugMatch[2].trim(),
+          },
+        });
+      }
     }
 
     return NextResponse.json(step);

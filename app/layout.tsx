@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { SessionProvider } from "next-auth/react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { SideNav } from "@/components/layout/side-nav";
@@ -28,6 +29,7 @@ export default function RootLayout({
     <html lang="zh-CN" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <SessionProvider>
           <TooltipProvider delay={300}>
             <SideNav />
             <main className="flex-1 ml-16 lg:ml-64 min-h-screen bg-muted/30">
@@ -35,6 +37,7 @@ export default function RootLayout({
             </main>
             <Toaster richColors position="top-center" />
           </TooltipProvider>
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>

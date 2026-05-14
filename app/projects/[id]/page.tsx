@@ -14,6 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, ArrowRight, Eye, Heart, MessageCircle, Share2, Star } from "lucide-react";
 import { DeleteProjectButton } from "@/components/project/delete-button";
+import { ImprovementList } from "@/components/project/improvement-list";
 
 export const dynamic = "force-dynamic";
 
@@ -177,34 +178,7 @@ export default async function ProjectDetailPage({
 
         {/* Improvements tab */}
         <TabsContent value="improvements" className="space-y-4 mt-4">
-          {project.improvements.length === 0 ? (
-            <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">
-                还没有改进建议。AI 在分析脚本和数据时会自动生成改进建议。
-              </CardContent>
-            </Card>
-          ) : (
-            project.improvements.map((imp) => (
-              <Card key={imp.id}>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline">{imp.category}</Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(imp.createdAt).toLocaleDateString("zh-CN")}
-                    </span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm">{imp.suggestion}</p>
-                  {imp.wasHelpful !== null && (
-                    <Badge variant={imp.wasHelpful ? "default" : "destructive"} className="mt-2 text-xs">
-                      {imp.wasHelpful ? "有帮助" : "无帮助"}
-                    </Badge>
-                  )}
-                </CardContent>
-              </Card>
-            ))
-          )}
+          <ImprovementList improvements={project.improvements} />
         </TabsContent>
       </Tabs>
     </div>
