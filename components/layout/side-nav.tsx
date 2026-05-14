@@ -11,6 +11,7 @@ import {
   Settings,
   Zap,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 const navItems = [
   { href: "/", label: "仪表盘", icon: LayoutDashboard },
@@ -25,7 +26,6 @@ export function SideNav() {
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-16 lg:w-64 border-r bg-background flex flex-col">
-      {/* Logo */}
       <div className="h-14 flex items-center gap-3 px-3 lg:px-4 border-b">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary">
           <Zap className="h-5 w-5 text-primary-foreground" />
@@ -35,13 +35,10 @@ export function SideNav() {
         </span>
       </div>
 
-      {/* Nav links */}
       <nav className="flex-1 py-3 px-2 lg:px-3 space-y-1">
         {navItems.map((item) => {
           const isActive =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.href);
+            item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
           return (
             <Link
               key={item.href}
@@ -60,9 +57,11 @@ export function SideNav() {
         })}
       </nav>
 
-      {/* Version */}
-      <div className="border-t p-3 hidden lg:block">
-        <p className="text-xs text-muted-foreground">VideoForge v0.1.0</p>
+      <div className="border-t">
+        <ThemeToggle />
+        <div className="p-3 hidden lg:block">
+          <p className="text-xs text-muted-foreground">VideoForge v0.2.0</p>
+        </div>
       </div>
     </aside>
   );
