@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, FolderOpen, CheckCircle2, Clock, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { WelcomeCard } from "@/components/layout/onboarding";
 
 export const dynamic = "force-dynamic";
 
@@ -79,12 +80,7 @@ export default async function HomePage() {
         </div>
 
         {projects.length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <p className="text-muted-foreground mb-4">还没有项目</p>
-              <Link href="/projects/new"><Button>创建第一个项目</Button></Link>
-            </CardContent>
-          </Card>
+          <WelcomeCard />
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((p) => {

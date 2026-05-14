@@ -147,8 +147,15 @@ export const WORKFLOW_STEPS: WorkflowStep[] = [
       { id: "5-3", label: "关键概念处有自然的0.5-1秒停顿", description: "给观众消化时间，不是在赶路", type: "checkbox", weight: 0.6 },
       { id: "5-4", label: "全片长度在目标范围内", description: "B站15-30分钟，抖音2-5分钟，视频号5-10分钟", type: "checkbox", weight: 0.8 },
     ],
-    aiEvaluationEnabled: false,
-    aiPrompt: "",
+    aiEvaluationEnabled: true,
+    aiPrompt: `你是资深音频制作顾问。评估以下配音方案的合理性：
+
+1. 语速分析：预估字数 ÷ 时长 = 字/分钟，是否在 220-260 区间？
+2. 停顿设计：关键概念处是否预留了停顿？
+3. 工具选择：是否选择了适配平台的配音工具？
+4. 音质风险：AI 配音在专业术语处是否有断句错误风险？
+
+给出综合评分和具体优化建议。`,
   },
   {
     number: 6,
@@ -194,8 +201,15 @@ export const WORKFLOW_STEPS: WorkflowStep[] = [
       { id: "7-3", label: "每张静态图都有动画处理方案", description: "Ken Burns / 视差 / 逐要素出现", type: "checkbox", weight: 0.6 },
       { id: "7-4", label: "没有'随便找张网图凑合'的画面", description: "要么定制，要么用纯色+大字代替", type: "checkbox", weight: 0.4 },
     ],
-    aiEvaluationEnabled: false,
-    aiPrompt: "",
+    aiEvaluationEnabled: true,
+    aiPrompt: `你是资深视觉设计师和素材管理专家。评估以下素材制作方案：
+
+1. 原创度评估：定制素材 vs 素材库下载的比例是否健康？
+2. 风格一致性：不同来源的素材放在一起，风格是否统一？
+3. 动画方案：静态图的动画处理是否避免了"PPT感"？
+4. 素材缺口：根据脚本叙述，还有哪些画面没有被覆盖？
+
+给出综合评分和需要补做的素材清单。`,
   },
   // ========== 后期期 ==========
   {
@@ -215,8 +229,16 @@ export const WORKFLOW_STEPS: WorkflowStep[] = [
       { id: "8-5", label: "每一段关键信息都有对应视觉强化", description: "数字放大弹出、重要概念停留标注", type: "checkbox", weight: 0.6 },
       { id: "8-6", label: "长视频（>10分钟）有章节标记", description: "让观众知道讲到哪了、还剩多少", type: "checkbox", weight: 0.4 },
     ],
-    aiEvaluationEnabled: false,
-    aiPrompt: "",
+    aiEvaluationEnabled: true,
+    aiPrompt: `你是资深剪辑师和视频节奏顾问。评估以下剪辑方案：
+
+1. 节奏分析：画面变化频率是否在每 5-8 秒有变化？
+2. 转场评估：转场类型是否克制（不超过 3 种）？
+3. 字幕质量：字幕位置、大小、校对是否到位？
+4. BGM 配合：背景音乐是否压过人声？关键处是否有情绪配合？
+5. 章节标记：长视频是否有导航节点？
+
+给出综合评分和需要重剪的具体段落。`,
   },
   {
     number: 9,
@@ -233,8 +255,15 @@ export const WORKFLOW_STEPS: WorkflowStep[] = [
       { id: "9-3", label: "外部试看者标记'想划走'点不超过2处", description: "超过2处 = 回去重剪那几段", type: "checkbox", weight: 0.8 },
       { id: "9-4", label: "全程无技术错误", description: "字幕时间轴错位、音画不同步、黑帧、爆音", type: "checkbox", weight: 1.0 },
     ],
-    aiEvaluationEnabled: false,
-    aiPrompt: "",
+    aiEvaluationEnabled: true,
+    aiPrompt: `你是资深视频质量控制专家。根据以下终审反馈评估视频质量：
+
+1. 静音测试：用户提交的"关声音看"反馈，画面叙事是否独立完整？
+2. 移动端体验：在手机上字幕和关键信息是否可读？
+3. 试看反馈：试看者标记的"想划走"点，分析可能原因。
+4. 技术检查清单：字幕时间轴、音画同步、黑帧是否有遗漏？
+
+给出综合评分，并按紧急程度排出需要修改的优先清单。`,
   },
   {
     number: 10,

@@ -10,27 +10,38 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Plus, FolderOpen } from "lucide-react";
+import { Plus, FolderOpen, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ProjectSearchInput } from "@/components/project/search-input";
 
 export const dynamic = "force-dynamic";
 
 const platformNames: Record<string, string> = {
-  bilibili: "B站",
-  douyin: "抖音",
-  wechat: "视频号",
+  bilibili: "B站", douyin: "抖音", wechat: "视频号",
 };
 
 const statusNames: Record<string, string> = {
-  planning: "规划中",
-  scripting: "脚本撰写",
-  producing: "制作中",
-  published: "已发布",
-  archived: "已归档",
+  planning: "规划中", scripting: "脚本撰写", producing: "制作中", published: "已发布", archived: "已归档",
 };
 
-export default async function ProjectsPage() {
+export default async function ProjectsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string }>;
+}) {
+  const { search } = await searchParams;
+  const searchQuery = search || "";
+
   const projects = await db.project.findMany({
     orderBy: { updatedAt: "desc" },
+    where: searchQuery
+      ? {
+          OR: [
+            { title: { contains: searchQuery } },
+            { description: { contains: searchQuery } },
+          ],
+        }
+      : undefined,
     include: {
       workflowSteps: { select: { status: true } },
       videoData: { select: { views: true } },
@@ -39,22 +50,41 @@ export default async function ProjectsPage() {
 
   return (
     <div className="p-4 lg:p-8 space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">项目</h1>
-          <p className="text-muted-foreground mt-1">管理你的所有视频项目。</p>
+          <p className="text-muted-foreground mt-1">
+            {searchQuery
+              ? `搜索「${searchQuery}」的结果：${projects.length} 个`
+              : `共 ${projects.length} 个项目`}
+          </p>
         </div>
         <Link href="/projects/new">
           <Button><Plus className="h-4 w-4 mr-1" />新项目</Button>
         </Link>
       </div>
 
+      {/* Search bar */}
+      <ProjectSearchInput defaultValue={searchQuery} />
+
       {projects.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center space-y-4">
-            <FolderOpen className="h-12 w-12 mx-auto text-muted-foreground/50" />
-            <p className="text-muted-foreground">还没有项目。创建第一个项目来开始吧。</p>
-            <Link href="/projects/new"><Button>创建项目</Button></Link>
+            {searchQuery ? (
+              <>
+                <Search className="h-12 w-12 mx-auto text-muted-foreground/40" />
+                <p className="text-muted-foreground">没有找到匹配「{searchQuery}」的项目</p>
+                <Link href="/projects">
+                  <Button variant="outline">清除搜索</Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <FolderOpen className="h-12 w-12 mx-auto text-muted-foreground/50" />
+                <p className="text-muted-foreground">还没有项目。创建第一个项目来开始吧。</p>
+                <Link href="/projects/new"><Button>创建项目</Button></Link>
+              </>
+            )}
           </CardContent>
         </Card>
       ) : (
