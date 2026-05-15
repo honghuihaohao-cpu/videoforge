@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { WelcomeCard } from "@/components/layout/onboarding";
-import { ArrowRight, FolderOpen, CheckCircle2, Clock, Plus, Image, MessageCircle, Repeat, Network, Pencil, Target, Activity, Wand2, Flame, Zap, TrendingUp, Sparkles, Lightbulb } from "lucide-react";
+import { ArrowRight, FolderOpen, CheckCircle2, Clock, Plus, Image, MessageCircle, Repeat, Network, Pencil, Target, Activity, Wand2, Flame, Hash, Zap, TrendingUp, Sparkles, Lightbulb } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +42,8 @@ export default async function HomePage() {
       tools: [
         { href: "/workflow", icon: Zap, label: "VideoForge", desc: "10步工作流", color: "bg-amber-50 text-amber-600 dark:bg-amber-950 dark:text-amber-400" },
         { href: "/tools/commentmine", icon: MessageCircle, label: "CommentMine", desc: "评论挖掘", color: "bg-green-50 text-green-600 dark:bg-green-950 dark:text-green-400" },
+        { href: "/tools/pacingcalc", icon: Clock, label: "PacingCalc", desc: "时长计算", color: "bg-lime-50 text-lime-600 dark:bg-lime-950 dark:text-lime-400" },
+        { href: "/tools/seodesc", icon: Hash, label: "SEODesc", desc: "SEO描述", color: "bg-violet-50 text-violet-600 dark:bg-violet-950 dark:text-violet-400" },
       ],
     },
   ];
