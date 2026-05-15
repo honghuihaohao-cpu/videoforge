@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, FolderOpen, CheckCircle2, Clock, Plus } from "lucide-react";
+import { ArrowRight, FolderOpen, CheckCircle2, Clock, Plus, Image, MessageCircle, Repeat, Network, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WelcomeCard } from "@/components/layout/onboarding";
 
@@ -42,9 +42,9 @@ export default async function HomePage() {
   return (
     <div className="p-4 lg:p-8 space-y-8">
       <div>
-        <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">仪表盘</h1>
+        <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">CreatorKit</h1>
         <p className="text-muted-foreground mt-1">
-          管理你的视频项目，追踪每一步进展。
+          创作者工具箱 — 5 合 1 超级应用
         </p>
       </div>
 
@@ -60,6 +60,29 @@ export default async function HomePage() {
             </CardContent>
           </Card>
         ))}
+      </div>
+
+      {/* Tool quick links */}
+      <div>
+        <h2 className="text-lg font-semibold mb-3">工具箱</h2>
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+          {[
+            { href: "/workflow", icon: Zap, label: "VideoForge", desc: "10步工作流 + AI 分析 + 数据复盘", color: "text-amber-500 bg-amber-50 dark:bg-amber-950" },
+            { href: "/tools/coverjudge", icon: Image, label: "CoverJudge", desc: "AI 封面 CTR 三平台预测", color: "text-blue-500 bg-blue-50 dark:bg-blue-950" },
+            { href: "/tools/commentmine", icon: MessageCircle, label: "CommentMine", desc: "B站评论挖掘 + 选题生成", color: "text-green-500 bg-green-50 dark:bg-green-950" },
+            { href: "/tools/reforge", icon: Repeat, label: "Reforge", desc: "长脚本 → 5种平台格式", color: "text-purple-500 bg-purple-50 dark:bg-purple-950" },
+            { href: "/tools/knowchain", icon: Network, label: "KnowChain", desc: "知识图谱 + 选题推荐", color: "text-rose-500 bg-rose-50 dark:bg-rose-950" },
+          ].map((t) => (
+            <Link key={t.href} href={t.href}>
+              <Card className="hover:shadow-md transition-shadow h-full cursor-pointer">
+                <CardContent className="p-4 flex items-start gap-3">
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${t.color}`}><t.icon className="h-5 w-5" /></div>
+                  <div><CardTitle className="text-sm">{t.label}</CardTitle><CardDescription className="text-xs mt-0.5">{t.desc}</CardDescription></div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
       </div>
 
       <div className="flex gap-3">

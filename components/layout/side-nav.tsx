@@ -10,6 +10,10 @@ import {
   BarChart3,
   Settings,
   GitCompare,
+  Image,
+  MessageCircle,
+  Repeat,
+  Network,
   Zap,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
@@ -21,6 +25,10 @@ const navItems = [
   { href: "/projects", label: "项目", icon: FolderOpen },
   { href: "/analytics", label: "数据分析", icon: BarChart3 },
   { href: "/compare", label: "对比", icon: GitCompare },
+  { href: "/tools/coverjudge", label: "封面裁判", icon: Image },
+  { href: "/tools/commentmine", label: "评论挖掘", icon: MessageCircle },
+  { href: "/tools/reforge", label: "内容复刻", icon: Repeat },
+  { href: "/tools/knowchain", label: "知识图谱", icon: Network },
   { href: "/settings", label: "设置", icon: Settings },
 ];
 
@@ -34,7 +42,7 @@ export function SideNav() {
           <Zap className="h-5 w-5 text-primary-foreground" />
         </div>
         <span className="hidden lg:inline font-semibold text-lg tracking-tight">
-          VideoForge
+          CreatorKit
         </span>
       </div>
 
@@ -64,7 +72,7 @@ export function SideNav() {
         <ThemeToggle />
         <UserMenu />
         <div className="p-3 hidden lg:block">
-          <p className="text-xs text-muted-foreground">VideoForge v0.2.0</p>
+          <p className="text-xs text-muted-foreground">CreatorKit v2.0</p>
         </div>
       </div>
     </aside>
