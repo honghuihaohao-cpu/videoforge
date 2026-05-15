@@ -56,6 +56,24 @@ npm start
 
 支持部署到 Vercel（一键部署）、Docker 或任何 Node.js 环境。
 
+#### Vercel 部署（免费）
+
+1. Fork 或 Push 此仓库到 GitHub
+2. 去 [vercel.com](https://vercel.com) import 此仓库
+3. 设置环境变量：
+   - `DATABASE_URL` — Turso 数据库 URL（`libsql://...`，去 [turso.tech](https://turso.tech) 免费创建）
+   - `ANTHROPIC_API_KEY` — Claude API Key
+   - `AUTH_SECRET` — 随机字符串（`npx auth secret` 生成）
+4. Deploy
+
+> Vercel 无状态，需要 Turso 作为托管 SQLite。本地开发用 `file:./dev.db` 即可。
+
+#### Docker 部署
+
+```bash
+docker-compose up -d
+```
+
 ## 技术栈
 
 | 层级 | 技术 |

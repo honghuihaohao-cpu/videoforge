@@ -82,3 +82,12 @@ model ImprovementLog {
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
+
+model KnowChainItem {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  concepts  String   @default("[]")
+  summary   String   @default("")
+  addedAt   DateTime @default(now())
+}

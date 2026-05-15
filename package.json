@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate",
     "test:watch": "vitest"
   },
   "dependencies": {
