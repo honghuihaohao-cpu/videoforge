@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, FolderOpen, CheckCircle2, Clock, Plus, Image, MessageCircle, Repeat, Network, Pencil, Target, Activity, Zap } from "lucide-react";
+import { ArrowRight, FolderOpen, CheckCircle2, Clock, Plus, Image, MessageCircle, Repeat, Network, Pencil, Target, Activity, Wand2, Flame, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WelcomeCard } from "@/components/layout/onboarding";
 
@@ -79,6 +79,8 @@ export default async function HomePage() {
             { href: "/tools/titleforge", icon: Pencil, label: "TitleForge", desc: "AI 标题生成 + CTR预测", color: "text-cyan-500 bg-cyan-50 dark:bg-cyan-950" },
             { href: "/tools/hooklab", icon: Target, label: "HookLab", desc: "5种钩子风格 + 留存预测", color: "text-orange-500 bg-orange-50 dark:bg-orange-950" },
             { href: "/tools/scriptdoctor", icon: Activity, label: "ScriptDoctor", desc: "节奏·逻辑·密度诊断", color: "text-indigo-500 bg-indigo-50 dark:bg-indigo-950" },
+            { href: "/tools/subtitlefix", icon: Wand2, label: "SubtitleFix", desc: "字幕错字修正 + 断句优化", color: "text-teal-500 bg-teal-50 dark:bg-teal-950" },
+            { href: "/tools/trendradar", icon: Flame, label: "TrendRadar", desc: "AI 热点趋势扫描", color: "text-red-500 bg-red-50 dark:bg-red-950" },
           ].map((t) => (
             <Link key={t.href} href={t.href}>
               <Card className="hover:shadow-md transition-shadow h-full cursor-pointer">

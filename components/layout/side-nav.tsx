@@ -17,6 +17,8 @@ import {
   Pencil,
   Target,
   Activity,
+  Wand2,
+  Flame,
   Zap,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
@@ -35,6 +37,8 @@ const navItems = [
   { href: "/tools/titleforge", label: "标题锻造", icon: Pencil },
   { href: "/tools/hooklab", label: "钩子工坊", icon: Target },
   { href: "/tools/scriptdoctor", label: "脚本医生", icon: Activity },
+  { href: "/tools/subtitlefix", label: "字幕修正", icon: Wand2 },
+  { href: "/tools/trendradar", label: "热点雷达", icon: Flame },
   { href: "/settings", label: "设置", icon: Settings },
 ];
 
