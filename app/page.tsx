@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, FolderOpen, CheckCircle2, Clock, Plus, Image, MessageCircle, Repeat, Network, Zap } from "lucide-react";
+import { ArrowRight, FolderOpen, CheckCircle2, Clock, Plus, Image, MessageCircle, Repeat, Network, Pencil, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WelcomeCard } from "@/components/layout/onboarding";
 
@@ -42,10 +42,14 @@ export default async function HomePage() {
   return (
     <div className="p-4 lg:p-8 space-y-8">
       <div>
-        <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">CreatorKit</h1>
-        <p className="text-muted-foreground mt-1">
-          创作者工具箱 — 5 合 1 超级应用
-        </p>
+        <div className="rounded-xl bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 dark:from-zinc-800 dark:via-zinc-900 dark:to-black p-6 lg:p-8 text-white">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20"><Zap className="h-5 w-5" /></div>
+            <span className="text-xs text-zinc-400 tracking-wide">CREATOR KIT v2.0</span>
+          </div>
+          <h1 className="text-3xl lg:text-4xl font-bold tracking-tight">创作者工具箱</h1>
+          <p className="text-zinc-400 mt-2 max-w-xl">5 合 1 超级应用 — 从选题策划到数据复盘，从封面 CTR 预测到跨平台内容复刻，一个人的视频制作团队。</p>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -72,6 +76,7 @@ export default async function HomePage() {
             { href: "/tools/commentmine", icon: MessageCircle, label: "CommentMine", desc: "B站评论挖掘 + 选题生成", color: "text-green-500 bg-green-50 dark:bg-green-950" },
             { href: "/tools/reforge", icon: Repeat, label: "Reforge", desc: "长脚本 → 5种平台格式", color: "text-purple-500 bg-purple-50 dark:bg-purple-950" },
             { href: "/tools/knowchain", icon: Network, label: "KnowChain", desc: "知识图谱 + 选题推荐", color: "text-rose-500 bg-rose-50 dark:bg-rose-950" },
+            { href: "/tools/titleforge", icon: Pencil, label: "TitleForge", desc: "AI 标题生成 + CTR预测", color: "text-cyan-500 bg-cyan-50 dark:bg-cyan-950" },
           ].map((t) => (
             <Link key={t.href} href={t.href}>
               <Card className="hover:shadow-md transition-shadow h-full cursor-pointer">

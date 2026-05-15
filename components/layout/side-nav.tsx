@@ -14,6 +14,7 @@ import {
   MessageCircle,
   Repeat,
   Network,
+  Pencil,
   Zap,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
@@ -29,6 +30,7 @@ const navItems = [
   { href: "/tools/commentmine", label: "评论挖掘", icon: MessageCircle },
   { href: "/tools/reforge", label: "内容复刻", icon: Repeat },
   { href: "/tools/knowchain", label: "知识图谱", icon: Network },
+  { href: "/tools/titleforge", label: "标题锻造", icon: Pencil },
   { href: "/settings", label: "设置", icon: Settings },
 ];
 
