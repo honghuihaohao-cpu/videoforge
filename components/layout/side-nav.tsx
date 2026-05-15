@@ -15,6 +15,8 @@ import {
   Repeat,
   Network,
   Pencil,
+  Target,
+  Activity,
   Zap,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
@@ -31,6 +33,8 @@ const navItems = [
   { href: "/tools/reforge", label: "内容复刻", icon: Repeat },
   { href: "/tools/knowchain", label: "知识图谱", icon: Network },
   { href: "/tools/titleforge", label: "标题锻造", icon: Pencil },
+  { href: "/tools/hooklab", label: "钩子工坊", icon: Target },
+  { href: "/tools/scriptdoctor", label: "脚本医生", icon: Activity },
   { href: "/settings", label: "设置", icon: Settings },
 ];
 
