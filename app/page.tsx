@@ -22,6 +22,7 @@ export default async function HomePage() {
     {
       name: "策划期", icon: Lightbulb, desc: "从选题到脚本",
       tools: [
+        { href: "/tools/ideaforge", icon: Lightbulb, label: "IdeaForge", desc: "AI 创意孵化器", color: "bg-yellow-50 text-yellow-600 dark:bg-yellow-950 dark:text-yellow-400" },
         { href: "/tools/trendradar", icon: Flame, label: "TrendRadar", desc: "热点趋势扫描", color: "bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400" },
         { href: "/tools/knowchain", icon: Network, label: "KnowChain", desc: "知识图谱", color: "bg-rose-50 text-rose-600 dark:bg-rose-950 dark:text-rose-400" },
         { href: "/tools/titleforge", icon: Pencil, label: "TitleForge", desc: "标题生成", color: "bg-cyan-50 text-cyan-600 dark:bg-cyan-950 dark:text-cyan-400" },
